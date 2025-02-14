@@ -184,7 +184,6 @@ func (d *SharedMemoryWindows) Close() {
 	if d.ReadOnly {
 		return
 	}
-	println("Close called!")
 	windows.CloseHandle(d.MemHandle)
 	windows.CloseHandle(d.MutexHandle)
 }
