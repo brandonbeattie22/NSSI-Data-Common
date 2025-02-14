@@ -11,3 +11,7 @@ type SharedMemory interface {
 func CreateSharedMemory(memoryName string) (SharedMemory, error) {
 	return createSharedMemory(memoryName)
 }
+
+func AccessSharedMemory(memoryName string) (SharedMemory, error) {
+	return accessSharedMemory(memoryName)
+}

@@ -12,6 +12,12 @@ type SharedMemoryDarwin struct {
 	filepath string
 }
 
+func accessSharedMemory(sharedDataName string) (SharedMemoryDarwin, error) {
+	return SharedMemoryDarwin{
+		filepath: "/var/run/" + sharedDataName,
+	}, nil
+}
+
 func createSharedMemory(sharedDataName string) (SharedMemoryDarwin, error) {
 	filepath := "/var/run/" + sharedDataName
 	if f, err := os.OpenFile(filepath, os.O_CREATE|os.O_RDWR, 0677); err != nil {
