@@ -1,4 +1,4 @@
-package gosharedmemory
+package nssidatacommon
 
 const SHARED_DATA_BUFF_SIZE = uint32(1024)
 

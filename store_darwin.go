@@ -1,4 +1,4 @@
-package gosharedmemory
+package nssidatacommon
 
 import (
 	"fmt"

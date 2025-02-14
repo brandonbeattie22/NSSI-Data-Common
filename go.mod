@@ -1,4 +1,4 @@
-module nssi-shared-memory
+module github.com/brandonbeattie22/NSSI-Data-Common
 
 go 1.24.0
 
