@@ -3,8 +3,6 @@ package gosharedmemory
 import (
 	"slices"
 	"testing"
-
-	"golang.org/x/sys/windows"
 )
 
 func TestStoreRecall(t *testing.T) {
@@ -12,25 +10,22 @@ func TestStoreRecall(t *testing.T) {
 	for _, testBytes := range [][]byte{
 		[]byte("Hello, World!"),
 	} {
-		mutex, memHandle, err := CreateSharedMemory(testDataPath)
+		sharedMem, err := CreateSharedMemory(testDataPath)
 		if err != nil {
-			t.Errorf("error in `CreateSharedMemory()`: %v", err)
+			t.Error(err)
 		} else {
-			if err := StoreData(testBytes, memHandle, mutex); err != nil {
-				t.Errorf("error in `StoreData()`: %v", err)
+			if err := sharedMem.StoreData(testBytes); err != nil {
+				t.Error(err)
 			} else {
-				if resultByte, err := RecallData(testDataPath); err != nil {
-					t.Errorf("error in `RecallData()`: %v", err)
+				if resultBytes, err := sharedMem.RecallData(); err != nil {
+					t.Error(err)
 				} else {
-					if !slices.Equal(resultByte, testBytes) {
-						t.Errorf("Original bytes not the same after `StoreData()` and `RecallData()`, started with \"%s\", ended up with \"%s\"",
-							testBytes, resultByte)
+					if !slices.Equal(resultBytes, testBytes) {
+						t.Error("test bytes do not equal result bytes")
 					}
 				}
 			}
 		}
-		windows.CloseHandle(mutex)
-		windows.CloseHandle(memHandle)
-
+		sharedMem.Close()
 	}
 }
