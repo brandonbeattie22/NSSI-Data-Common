@@ -152,3 +152,38 @@ func readStringIntoPointer(s string, p interface{}) error {
 	}
 	return nil
 }
+
+func (d *PressurePcbData) CreateStore(storageName string) (SharedMemory, error) {
+	sharedMem, err := CreateSharedMemory(storageName)
+	if err != nil {
+		return sharedMem, fmt.Errorf("failed to create shared memory: %v", err)
+	}
+	return sharedMem, d.Store(sharedMem)
+}
+
+func (d *PressurePcbData) Store(sharedMem SharedMemory) error {
+	jsonBytes, err := d.Json()
+	if err != nil {
+		return fmt.Errorf("failed to json-ify: %v", err)
+	}
+
+	if err := sharedMem.StoreData(jsonBytes); err != nil {
+		return fmt.Errorf("failed to store data to shared memory: %v", err)
+	}
+	return nil
+}
+
+func (d *PressurePcbData) Recall(storageName string) error {
+	sharedMem, err := AccessSharedMemory(storageName)
+	if err != nil {
+		return fmt.Errorf("failed to access shared memory: %d", err)
+	}
+	dataBytes, err := sharedMem.RecallData()
+	if err != nil {
+		return fmt.Errorf("failed to recall data from shared memory: %v", err)
+	}
+	if err := json.Unmarshal(dataBytes, d); err != nil {
+		return fmt.Errorf("failed to unmarshal json: %v", err)
+	}
+	return nil
+}

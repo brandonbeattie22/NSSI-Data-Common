@@ -76,3 +76,7 @@ func TestStoreRecallProc(t *testing.T) {
 		sharedMem.Close()
 	}
 }
+
+func TestStoreRecallData(t *testing.T) {
+
+}
